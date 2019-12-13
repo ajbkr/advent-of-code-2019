@@ -1,7 +1,7 @@
 {
   "name": "advent-of-code-2019",
   "version": "1.0.0",
-  "description": "",
+  "description": "Advent of Code 2019",
   "main": "index.js",
   "scripts": {
     "lint": "standard",
@@ -9,9 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrew J. Baker <andrew_j_baker2@hotmail.com>",
   "license": "ISC",
   "devDependencies": {
     "standard": "^14.3.1"
-  }
+  },
+  "private": true
 }

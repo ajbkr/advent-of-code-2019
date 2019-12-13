@@ -25,3 +25,35 @@ const sumOfFuelRequirements = moduleMasses.map(mass => {
     cumulativeSumOfFuelRequirements + fuelRequirement)
 
 console.log(sumOfFuelRequirements)
+
+function run (program) {
+  for (let position = 0; program[position] !== 99; position += 4) {
+    const operation = [
+      (x, y) => x + y,
+      (x, y) => x * y
+    ]
+
+    switch (program[position]) {
+      case 1:
+      case 2:
+        program[program[position + 3]] = operation[program[position] - 1](
+          program[program[position + 1]], program[program[position + 2]])
+        break
+      default:
+        console.error(`Unknown opcode ${program[position]} at position ${position}`)
+        process.exit(1)
+    }
+  }
+
+  return program
+}
+
+const program = fs.readFileSync('puzzle-input2.dat')
+  .toString()
+  .split(',')
+  .map(opcode => parseInt(opcode))
+
+program[1] = 12
+program[2] = 2
+
+console.log(run(program)[0])
