@@ -26,34 +26,51 @@ const sumOfFuelRequirements = moduleMasses.map(mass => {
 
 console.log(sumOfFuelRequirements)
 
-function run (program) {
-  for (let position = 0; program[position] !== 99; position += 4) {
-    const operation = [
+function run (memory) {
+  for (let instructionPointer = 0; memory[instructionPointer] !== 99;) {
+    const operations = [
       (x, y) => x + y,
       (x, y) => x * y
     ]
 
-    switch (program[position]) {
+    const opcode = memory[instructionPointer]
+    const parameters = memory.slice(instructionPointer + 1,
+      instructionPointer + 4)
+
+    switch (opcode) {
       case 1:
       case 2:
-        program[program[position + 3]] = operation[program[position] - 1](
-          program[program[position + 1]], program[program[position + 2]])
+        memory[parameters[2]] = operations[opcode - /* offset */ 1](
+          memory[parameters[0]], memory[parameters[1]])
+        instructionPointer += 4
         break
       default:
-        console.error(`Unknown opcode ${program[position]} at position ${position}`)
+        console.error(
+          `Unknown opcode ${opcode} at address ${instructionPointer}`)
         process.exit(1)
     }
   }
 
-  return program
+  return memory
 }
 
-const program = fs.readFileSync('puzzle-input2.dat')
+const TARGET_OUTPUT = 19690720
+
+const memory = fs.readFileSync('puzzle-input2.dat')
   .toString()
   .split(',')
   .map(opcode => parseInt(opcode))
 
-program[1] = 12
-program[2] = 2
+for (let noun = 0; noun < 100; ++noun) {
+  for (let verb = 0; verb < 100; ++verb) {
+    const mem = [...memory]
 
-console.log(run(program)[0])
+    mem[1] = noun
+    mem[2] = verb
+
+    if (run(mem)[0] === TARGET_OUTPUT) {
+      console.log('' + noun + verb)
+      break
+    }
+  }
+}
